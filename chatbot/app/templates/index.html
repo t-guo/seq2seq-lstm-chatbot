@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>my bot</title>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <style>
+       /* label color */
+       .input-field label {
+         color: #999;
+       }
+       /* label focus color */
+       .input-field input[type=text]:focus + label {
+         color: #000 !important;
+       }
+       /* label underline focus color */
+       .input-field input[type=text]:focus {
+         border-bottom: 1px solid #000 !important;
+         box-shadow: 0 1px 0 0 #000 !important;
+       }
+
+       .input-field input[type=text]:focus {
+         border-bottom: 1px solid #000 !important;
+         box-shadow: 0 1px 0 0 #000 !important;
+       }
+
+        i.icon-gray {
+            color: #999;
+        }
+
+        /* icon prefix focus color */
+       .input-field .prefix.active {
+         color: #000 !important;
+       }
+
+        ::-webkit-scrollbar {
+          width: 0px;  /* remove scrollbar space */
+          background: transparent;  /* optional: just make scrollbar invisible */
+        }
+        /* optional: show position indicator in red */
+        ::-webkit-scrollbar-thumb {
+          background: #FF0000;
+        }
+
+        .in {
+          padding: 15px 17px !important;
+          background-color: #54C7FC;
+          overflow-wrap: break-word;
+          border-radius: 15px;
+        }
+
+        .out {
+          color: #fff;
+          padding: 15px 17px !important;
+          background-color: #8E8E93;
+          overflow-wrap: break-word;
+          border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+  <h3>BOT LEARNING GROUP</h3>
+
+  <div class="row" style="margin-bottom: 0px;">
+    <form id="input_form" class="col l12" autocomplete="off">
+      <div class="row">
+        <div class="input-field col l12">
+	  <i class="material-icons icon-gray prefix">chat</i>
+          <input id="input" type="text" class="validate">
+          <label for="input">SAY SOMETHING ABOUT AN AIRLINE EXPERIENCE...(keep it pg)</label>
+        </div>
+      </div>
+
+      <input type="submit" style="height: 0px; width: 0px; border: none; padding: 0px;" />
+    </form>
+  </div>
+
+  <div class="container" style="margin-top: -50px;">
+    <div class="row" id="response">
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
+<script>
+  winHeight = $(window).height();
+  response_container_height = (winHeight - 220) + "px";
+
+  $("#response").attr("style","height:" + response_container_height +"; overflow-y: scroll; margin-top: -50px; padding-right: 50px;");
+
+  $("#input_form").submit(function(event) {
+    event.preventDefault();
+
+    var input_str = $("#input").val();
+    var post_data = {"input": input_str};
+
+    $.ajax({
+            type: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify(post_data),
+            url: '/get_response',
+            success: function(result) {
+                $("#response").append( "<p class='in col s8'>" + input_str + "</p> <p class='col s8 out offset-s4'>" + result + "</p>" );
+                $("#input").val("");
+                $('#response').scrollTop($('#response')[0].scrollHeight);
+             }
+    });
+  });
+</script>
